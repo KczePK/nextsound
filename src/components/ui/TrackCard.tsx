@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import { Button } from './button';
 import { Card, CardContent } from './card';
 import {
-  FaPlay,
-  FaPause,
   FaClock
 } from 'react-icons/fa';
 import { ITrack } from '@/types';
@@ -21,8 +18,8 @@ interface TrackCardProps {
 export const TrackCard: React.FC<TrackCardProps> = ({
   track,
   category: _category,
-  isPlaying = false,
-  onPlay,
+  isPlaying: _isPlayingProp,
+  onPlay: _onPlayProp,
   variant = 'detailed',
   className
 }) => {
@@ -31,16 +28,6 @@ export const TrackCard: React.FC<TrackCardProps> = ({
 
   const { poster_path, original_title: title, name, artist, album, duration } = track;
   const displayTitle = title || name || 'Unknown Track';
-
-
-  const handlePlayClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log('🎯 TrackCard: Play button clicked for track:', track.name || track.original_title);
-    console.log('🎯 TrackCard: onPlay function available:', !!onPlay);
-    onPlay?.(track);
-  };
-
 
   const formatDuration = (ms: number) => {
     if (!ms) return '';
@@ -99,46 +86,6 @@ export const TrackCard: React.FC<TrackCardProps> = ({
             "absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent transition-opacity duration-300 rounded-lg",
             isHovered ? "opacity-100" : "opacity-0"
           )} />
-
-          {/* Play button overlay */}
-          <div className={cn(
-            "absolute inset-0 flex items-center justify-center transition-all duration-300",
-            isHovered ? "opacity-100 scale-100" : "opacity-0 scale-90"
-          )}>
-            <Button
-              onClick={handlePlayClick}
-              variant="ghost"
-              size="icon"
-              className={cn(
-                "w-14 h-14 rounded-full shadow-xl transition-all duration-200",
-                "bg-accent-orange hover:bg-accent-orange/90",
-                "hover:scale-110 text-white"
-              )}
-            >
-              {isPlaying ? (
-                <FaPause className="w-6 h-6 ml-0.5" />
-              ) : (
-                <FaPlay className="w-6 h-6 ml-1" />
-              )}
-            </Button>
-          </div>
-
-
-
-          {/* Playing indicator */}
-          {isPlaying && (
-            <div className="absolute bottom-3 left-3">
-              <div className="flex items-center space-x-2 px-3 py-1.5 bg-success-green rounded-full shadow-lg backdrop-blur-sm">
-                <div className="flex space-x-0.5">
-                  <div className="w-1 h-3 bg-white rounded-full animate-pulse"></div>
-                  <div className="w-1 h-2 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-1 h-4 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                  <div className="w-1 h-2 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
-                </div>
-                <span className="text-xs text-white font-semibold">Playing</span>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Track information */}
